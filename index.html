@@ -1,0 +1,697 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PDF Mate - Edit PDFs Offline</title>
+  <meta name="description" content="PDF Mate is a free Chrome extension for offline PDF editing. Merge, split, rotate, delete, and reorder PDF pages without uploading to any server." />
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📄</text></svg>" />
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    :root {
+      --primary: #4F46E5;
+      --primary-hover: #4338CA;
+      --primary-light: #EEF2FF;
+      --bg: #F8FAFC;
+      --bg-white: #FFFFFF;
+      --text-primary: #1E293B;
+      --text-secondary: #64748B;
+      --text-muted: #94A3B8;
+      --border: #E2E8F0;
+      --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+      --shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px -1px rgba(0, 0, 0, 0.1);
+      --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1);
+      --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.1);
+      --radius: 8px;
+      --radius-lg: 12px;
+      --radius-xl: 16px;
+    }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Helvetica Neue', Arial, sans-serif;
+      -webkit-font-smoothing: antialiased;
+      color: var(--text-primary);
+      background: var(--bg);
+      line-height: 1.6;
+    }
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+    /* Header */
+    header {
+      background: var(--bg-white);
+      border-bottom: 1px solid var(--border);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    header .container {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 64px;
+    }
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+    }
+    .logo-icon {
+      width: 36px;
+      height: 36px;
+      background: var(--primary-light);
+      border-radius: var(--radius);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+    }
+    .logo-text {
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--text-primary);
+    }
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 32px;
+    }
+    .nav-links a {
+      text-decoration: none;
+      color: var(--text-secondary);
+      font-size: 14px;
+      font-weight: 500;
+      transition: color 0.2s;
+    }
+    .nav-links a:hover {
+      color: var(--primary);
+    }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      font-weight: 500;
+      border-radius: var(--radius);
+      transition: all 0.2s ease;
+      cursor: pointer;
+      border: none;
+      text-decoration: none;
+    }
+    .btn-primary {
+      background: var(--primary);
+      color: white;
+      padding: 10px 20px;
+    }
+    .btn-primary:hover {
+      background: var(--primary-hover);
+      transform: translateY(-1px);
+      box-shadow: var(--shadow-md);
+    }
+    .btn-secondary {
+      background: var(--bg-white);
+      color: var(--text-primary);
+      border: 1px solid var(--border);
+      padding: 10px 20px;
+    }
+    .btn-secondary:hover {
+      background: var(--bg);
+      border-color: var(--text-muted);
+    }
+    .btn-lg {
+      padding: 14px 28px;
+      font-size: 16px;
+    }
+
+    /* Hero */
+    .hero {
+      padding: 80px 0 60px;
+      text-align: center;
+      background: linear-gradient(180deg, var(--bg-white) 0%, var(--bg) 100%);
+    }
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: var(--primary-light);
+      color: var(--primary);
+      padding: 6px 14px;
+      border-radius: 9999px;
+      font-size: 13px;
+      font-weight: 500;
+      margin-bottom: 24px;
+    }
+    .hero h1 {
+      font-size: 48px;
+      font-weight: 800;
+      line-height: 1.1;
+      margin-bottom: 20px;
+      letter-spacing: -0.02em;
+    }
+    .hero h1 span {
+      color: var(--primary);
+    }
+    .hero-desc {
+      font-size: 18px;
+      color: var(--text-secondary);
+      max-width: 560px;
+      margin: 0 auto 32px;
+    }
+    .hero-buttons {
+      display: flex;
+      gap: 12px;
+      justify-content: center;
+      margin-bottom: 48px;
+    }
+    .hero-stats {
+      display: flex;
+      justify-content: center;
+      gap: 48px;
+    }
+    .stat-item {
+      text-align: center;
+    }
+    .stat-number {
+      font-size: 28px;
+      font-weight: 700;
+      color: var(--text-primary);
+    }
+    .stat-label {
+      font-size: 13px;
+      color: var(--text-secondary);
+    }
+
+    /* Features */
+    .features {
+      padding: 80px 0;
+    }
+    .section-header {
+      text-align: center;
+      margin-bottom: 48px;
+    }
+    .section-header h2 {
+      font-size: 32px;
+      font-weight: 700;
+      margin-bottom: 12px;
+    }
+    .section-header p {
+      font-size: 16px;
+      color: var(--text-secondary);
+    }
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+    }
+    .feature-card {
+      background: var(--bg-white);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 28px;
+      transition: all 0.2s;
+    }
+    .feature-card:hover {
+      box-shadow: var(--shadow-lg);
+      transform: translateY(-2px);
+    }
+    .feature-icon {
+      width: 48px;
+      height: 48px;
+      border-radius: var(--radius);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+      margin-bottom: 16px;
+    }
+    .feature-card h3 {
+      font-size: 18px;
+      font-weight: 600;
+      margin-bottom: 8px;
+    }
+    .feature-card p {
+      font-size: 14px;
+      color: var(--text-secondary);
+      line-height: 1.6;
+    }
+
+    /* How It Works */
+    .how-it-works {
+      padding: 80px 0;
+      background: var(--bg-white);
+    }
+    .steps {
+      display: flex;
+      gap: 32px;
+      justify-content: center;
+    }
+    .step {
+      flex: 1;
+      max-width: 280px;
+      text-align: center;
+    }
+    .step-number {
+      width: 48px;
+      height: 48px;
+      background: var(--primary);
+      color: white;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      font-weight: 700;
+      margin: 0 auto 16px;
+    }
+    .step h3 {
+      font-size: 18px;
+      font-weight: 600;
+      margin-bottom: 8px;
+    }
+    .step p {
+      font-size: 14px;
+      color: var(--text-secondary);
+    }
+
+    /* Pricing */
+    .pricing {
+      padding: 80px 0;
+    }
+    .pricing-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+      max-width: 800px;
+      margin: 0 auto;
+    }
+    .pricing-card {
+      background: var(--bg-white);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 32px;
+      text-align: center;
+      position: relative;
+    }
+    .pricing-card.popular {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 1px var(--primary);
+    }
+    .popular-badge {
+      position: absolute;
+      top: -12px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: var(--primary);
+      color: white;
+      padding: 4px 16px;
+      border-radius: 9999px;
+      font-size: 12px;
+      font-weight: 600;
+    }
+    .pricing-card h3 {
+      font-size: 20px;
+      font-weight: 600;
+      margin-bottom: 8px;
+    }
+    .pricing-card .price {
+      font-size: 36px;
+      font-weight: 800;
+      margin-bottom: 4px;
+    }
+    .pricing-card .price span {
+      font-size: 14px;
+      font-weight: 400;
+      color: var(--text-secondary);
+    }
+    .pricing-card .period {
+      font-size: 14px;
+      color: var(--text-secondary);
+      margin-bottom: 24px;
+    }
+    .pricing-features {
+      list-style: none;
+      text-align: left;
+      margin-bottom: 24px;
+    }
+    .pricing-features li {
+      font-size: 14px;
+      color: var(--text-secondary);
+      padding: 8px 0;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .pricing-features li:last-child {
+      border-bottom: none;
+    }
+    .pricing-features .check {
+      color: #10B981;
+      font-weight: 700;
+    }
+    .pricing-features .cross {
+      color: var(--text-muted);
+    }
+
+    /* Security */
+    .security {
+      padding: 80px 0;
+      background: var(--bg-white);
+    }
+    .security-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 32px;
+    }
+    .security-item {
+      text-align: center;
+    }
+    .security-item .icon {
+      font-size: 40px;
+      margin-bottom: 16px;
+    }
+    .security-item h3 {
+      font-size: 18px;
+      font-weight: 600;
+      margin-bottom: 8px;
+    }
+    .security-item p {
+      font-size: 14px;
+      color: var(--text-secondary);
+    }
+
+    /* Footer */
+    footer {
+      background: var(--text-primary);
+      color: white;
+      padding: 48px 0 24px;
+    }
+    .footer-grid {
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr 1fr;
+      gap: 48px;
+      margin-bottom: 48px;
+    }
+    .footer-brand .logo-text {
+      color: white;
+      margin-bottom: 12px;
+    }
+    .footer-brand p {
+      font-size: 14px;
+      color: var(--text-muted);
+      line-height: 1.6;
+    }
+    .footer-links h4 {
+      font-size: 14px;
+      font-weight: 600;
+      margin-bottom: 16px;
+      color: white;
+    }
+    .footer-links ul {
+      list-style: none;
+    }
+    .footer-links li {
+      margin-bottom: 10px;
+    }
+    .footer-links a {
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 14px;
+      transition: color 0.2s;
+    }
+    .footer-links a:hover {
+      color: white;
+    }
+    .footer-bottom {
+      border-top: 1px solid rgba(255,255,255,0.1);
+      padding-top: 24px;
+      text-align: center;
+      font-size: 13px;
+      color: var(--text-muted);
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .hero h1 { font-size: 32px; }
+      .features-grid,
+      .pricing-grid,
+      .security-grid {
+        grid-template-columns: 1fr;
+      }
+      .steps {
+        flex-direction: column;
+        align-items: center;
+      }
+      .footer-grid {
+        grid-template-columns: 1fr;
+        gap: 32px;
+      }
+      .nav-links {
+        display: none;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Header -->
+  <header>
+    <div class="container">
+      <a href="#" class="logo">
+        <div class="logo-icon">📄</div>
+        <span class="logo-text">PDF Mate</span>
+      </a>
+      <nav class="nav-links">
+        <a href="#features">Features</a>
+        <a href="#how-it-works">How It Works</a>
+        <a href="#pricing">Pricing</a>
+        <a href="#security">Security</a>
+        <a href="#" class="btn btn-primary">Add to Chrome</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Hero -->
+  <section class="hero">
+    <div class="container">
+      <div class="hero-badge">🚀 Free Chrome Extension</div>
+      <h1>Edit PDFs <span>Offline</span><br>Without Uploading</h1>
+      <p class="hero-desc">
+        PDF Mate is a free Chrome extension that lets you merge, split, rotate, delete, and reorder PDF pages — all processed locally in your browser.
+      </p>
+      <div class="hero-buttons">
+        <a href="#" class="btn btn-primary btn-lg">Add to Chrome — It's Free</a>
+        <a href="#features" class="btn btn-secondary btn-lg">Learn More</a>
+      </div>
+      <div class="hero-stats">
+        <div class="stat-item">
+          <div class="stat-number">5</div>
+          <div class="stat-label">PDF Tools</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-number">0</div>
+          <div class="stat-label">Server Uploads</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-number">100%</div>
+          <div class="stat-label">Free to Start</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Features -->
+  <section class="features" id="features">
+    <div class="container">
+      <div class="section-header">
+        <h2>All-in-One PDF Toolkit</h2>
+        <p>Everything you need to edit PDFs, right in your browser</p>
+      </div>
+      <div class="features-grid">
+        <div class="feature-card">
+          <div class="feature-icon" style="background: #FEF3C7;">🔗</div>
+          <h3>Merge PDFs</h3>
+          <p>Combine multiple PDF files into one. Drag and drop to adjust file order. Supports up to 30 files at once.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon" style="background: #DBEAFE;">✂️</div>
+          <h3>Split PDF</h3>
+          <p>Split PDF into individual pages. Each page becomes a separate file. Download individually or as a zip archive.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon" style="background: #D1FAE5;">🔄</div>
+          <h3>Rotate Pages</h3>
+          <p>Rotate pages 90°, 180°, or 270°. Batch rotate all pages or select individual pages to rotate.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon" style="background: #FEE2E2;">🗑️</div>
+          <h3>Delete Pages</h3>
+          <p>Remove unwanted pages from your PDF. Click to select pages for deletion. Preview before removing.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon" style="background: #E0E7FF;">📋</div>
+          <h3>Reorder Pages</h3>
+          <p>Change page order with drag and drop or arrow buttons. Combine with delete and rotate for full control.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon" style="background: #F3E8FF;">🔒</div>
+          <h3>Privacy First</h3>
+          <p>All processing happens locally in your browser. Your files never leave your computer. No data collection.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- How It Works -->
+  <section class="how-it-works" id="how-it-works">
+    <div class="container">
+      <div class="section-header">
+        <h2>How It Works</h2>
+        <p>Get started in seconds — no signup required</p>
+      </div>
+      <div class="steps">
+        <div class="step">
+          <div class="step-number">1</div>
+          <h3>Install Extension</h3>
+          <p>Add PDF Mate to Chrome from the Web Store. It takes less than 10 seconds.</p>
+        </div>
+        <div class="step">
+          <div class="step-number">2</div>
+          <h3>Select Your PDF</h3>
+          <p>Click the PDF Mate icon, choose your tool, and upload your PDF files.</p>
+        </div>
+        <div class="step">
+          <div class="step-number">3</div>
+          <h3>Edit & Download</h3>
+          <p>Merge, split, rotate, or reorder pages. Download the result instantly.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Pricing -->
+  <section class="pricing" id="pricing">
+    <div class="container">
+      <div class="section-header">
+        <h2>Simple Pricing</h2>
+        <p>Start free, upgrade when you need more</p>
+      </div>
+      <div class="pricing-grid">
+        <div class="pricing-card">
+          <h3>Free</h3>
+          <div class="price">$0</div>
+          <div class="period">Forever free</div>
+          <ul class="pricing-features">
+            <li><span class="check">✓</span> Up to 10 pages per PDF</li>
+            <li><span class="check">✓</span> All 5 PDF tools</li>
+            <li><span class="check">✓</span> 500MB file size limit</li>
+            <li><span class="check">✓</span> No ads</li>
+            <li><span class="cross">✗</span> No batch processing</li>
+          </ul>
+          <a href="#" class="btn btn-secondary" style="width:100%">Get Started</a>
+        </div>
+        <div class="pricing-card popular">
+          <div class="popular-badge">Most Popular</div>
+          <h3>Pro</h3>
+          <div class="price">$2.99<span>/mo</span></div>
+          <div class="period">Billed monthly</div>
+          <ul class="pricing-features">
+            <li><span class="check">✓</span> Unlimited pages</li>
+            <li><span class="check">✓</span> All 5 PDF tools</li>
+            <li><span class="check">✓</span> 2GB file size limit</li>
+            <li><span class="check">✓</span> Batch processing</li>
+            <li><span class="check">✓</span> Priority support</li>
+          </ul>
+          <a href="#" class="btn btn-primary" style="width:100%">Upgrade to Pro</a>
+        </div>
+        <div class="pricing-card">
+          <h3>Lifetime</h3>
+          <div class="price">$19.99</div>
+          <div class="period">One-time payment</div>
+          <ul class="pricing-features">
+            <li><span class="check">✓</span> Unlimited pages</li>
+            <li><span class="check">✓</span> All 5 PDF tools</li>
+            <li><span class="check">✓</span> 2GB file size limit</li>
+            <li><span class="check">✓</span> Batch processing</li>
+            <li><span class="check">✓</span> Lifetime updates</li>
+          </ul>
+          <a href="#" class="btn btn-secondary" style="width:100%">Buy Lifetime</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Security -->
+  <section class="security" id="security">
+    <div class="container">
+      <div class="section-header">
+        <h2>Your Privacy Matters</h2>
+        <p>We take data security seriously</p>
+      </div>
+      <div class="security-grid">
+        <div class="security-item">
+          <div class="icon">🛡️</div>
+          <h3>No Server Upload</h3>
+          <p>All PDF processing happens entirely in your browser. Your files never leave your computer.</p>
+        </div>
+        <div class="security-item">
+          <div class="icon">🔐</div>
+          <h3>No Data Collection</h3>
+          <p>We don't collect, store, or analyze your PDF content. Your data belongs to you.</p>
+        </div>
+        <div class="security-item">
+          <div class="icon">⚡</div>
+          <h3>Offline Capable</h3>
+          <p>Once installed, PDF Mate works without an internet connection. Edit PDFs anywhere.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <div class="logo" style="margin-bottom: 12px;">
+            <div class="logo-icon">📄</div>
+            <span class="logo-text">PDF Mate</span>
+          </div>
+          <p>A free Chrome extension for offline PDF editing. Merge, split, rotate, delete, and reorder PDFs without uploading to any server.</p>
+        </div>
+        <div class="footer-links">
+          <h4>Product</h4>
+          <ul>
+            <li><a href="#features">Features</a></li>
+            <li><a href="#pricing">Pricing</a></li>
+            <li><a href="#">Changelog</a></li>
+            <li><a href="#">Roadmap</a></li>
+          </ul>
+        </div>
+        <div class="footer-links">
+          <h4>Resources</h4>
+          <ul>
+            <li><a href="#">Documentation</a></li>
+            <li><a href="#">Help Center</a></li>
+            <li><a href="#">Privacy Policy</a></li>
+            <li><a href="#">Terms of Service</a></li>
+          </ul>
+        </div>
+        <div class="footer-links">
+          <h4>Connect</h4>
+          <ul>
+            <li><a href="#">GitHub</a></li>
+            <li><a href="#">Twitter</a></li>
+            <li><a href="#">Contact Us</a></li>
+            <li><a href="mailto:zhangjian@m9ai.work">zhangjian@m9ai.work</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        © 2026 PDF Mate. All rights reserved. Made with ❤️ for PDF enthusiasts.
+      </div>
+    </div>
+  </footer>
+</body>
+</html>
