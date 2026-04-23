@@ -29,5 +29,11 @@ async function captureScreenshot(htmlFile, outputFile, width, height) {
   // Generate Thumbnail (600x600)
   await captureScreenshot('thumbnail-image.html', 'pdf-mate-thumbnail.png', 600, 600);
   
+  // Generate Small Promo Tile (440x280)
+  await captureScreenshot('small-promo.html', 'pdf-mate-small-promo.png', 440, 280);
+  
+  // Generate Large Promo Tile (1400x560)
+  await captureScreenshot('large-promo.html', 'pdf-mate-large-promo.png', 1400, 560);
+  
   console.log('All images generated successfully!');
 })();
