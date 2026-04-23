@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { 
+      width: 600px; 
+      height: 600px; 
+      background: linear-gradient(135deg, #4F46E5 0%, #1E3A5F 100%);
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    /* Background decorations */
+    .bg-circle {
+      position: absolute;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.05);
+    }
+    .circle-1 { width: 400px; height: 400px; top: -100px; right: -100px; }
+    .circle-2 { width: 300px; height: 300px; bottom: -80px; left: -80px; }
+    
+    /* Grid pattern */
+    .grid {
+      position: absolute;
+      inset: 0;
+      background-image: 
+        linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
+      background-size: 40px 40px;
+    }
+    
+    /* PDF Icon Stack */
+    .pdf-stack {
+      width: 200px;
+      height: 240px;
+      position: relative;
+      margin-bottom: 40px;
+    }
+    .pdf-page {
+      position: absolute;
+      background: white;
+      border-radius: 10px;
+      box-shadow: 0 20px 40px -10px rgba(0,0,0,0.3);
+    }
+    .page-1 {
+      width: 160px;
+      height: 200px;
+      top: 20px;
+      left: 20px;
+      transform: rotate(-6deg);
+      background: linear-gradient(135deg, #fff 0%, #f1f5f9 100%);
+    }
+    .page-2 {
+      width: 160px;
+      height: 200px;
+      top: 10px;
+      left: 30px;
+      transform: rotate(4deg);
+      background: linear-gradient(135deg, #fff 0%, #e2e8f0 100%);
+    }
+    .page-3 {
+      width: 160px;
+      height: 200px;
+      top: 30px;
+      left: 25px;
+      background: white;
+      display: flex;
+      flex-direction: column;
+      padding: 24px;
+    }
+    .pdf-logo {
+      width: 44px;
+      height: 44px;
+      background: linear-gradient(135deg, #EF4444 0%, #DC2626 100%);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-weight: bold;
+      font-size: 12px;
+      margin-bottom: 16px;
+    }
+    .pdf-line {
+      height: 6px;
+      background: #E2E8F0;
+      border-radius: 3px;
+      margin-bottom: 10px;
+    }
+    .pdf-line:nth-child(2) { width: 100%; }
+    .pdf-line:nth-child(3) { width: 75%; }
+    .pdf-line:nth-child(4) { width: 90%; }
+    
+    /* Brand */
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+    .brand-icon {
+      width: 48px;
+      height: 48px;
+      background: white;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+    }
+    .brand-text {
+      color: white;
+      font-size: 42px;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+    }
+    
+    /* Tagline */
+    .tagline {
+      color: rgba(255,255,255,0.8);
+      font-size: 20px;
+      font-weight: 500;
+      margin-bottom: 24px;
+    }
+    
+    /* Features */
+    .features {
+      display: flex;
+      gap: 16px;
+    }
+    .feature {
+      background: rgba(255,255,255,0.15);
+      backdrop-filter: blur(10px);
+      border-radius: 20px;
+      padding: 8px 16px;
+      color: white;
+      font-size: 14px;
+      font-weight: 500;
+      border: 1px solid rgba(255,255,255,0.1);
+    }
+  </style>
+</head>
+<body>
+  <div class="grid"></div>
+  <div class="bg-circle circle-1"></div>
+  <div class="bg-circle circle-2"></div>
+  
+  <div class="pdf-stack">
+    <div class="pdf-page page-1"></div>
+    <div class="pdf-page page-2"></div>
+    <div class="pdf-page page-3">
+      <div class="pdf-logo">PDF</div>
+      <div class="pdf-line"></div>
+      <div class="pdf-line"></div>
+      <div class="pdf-line"></div>
+    </div>
+  </div>
+  
+  <div class="brand">
+    <div class="brand-icon">📄</div>
+    <div class="brand-text">PDF Mate</div>
+  </div>
+  
+  <div class="tagline">Edit PDFs Offline</div>
+  
+  <div class="features">
+    <div class="feature">🔒 Private</div>
+    <div class="feature">⚡ Fast</div>
+    <div class="feature">🆓 Free</div>
+  </div>
+</body>
+</html>

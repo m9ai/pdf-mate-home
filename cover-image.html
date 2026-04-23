@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { 
+      width: 1280px; 
+      height: 720px; 
+      background: linear-gradient(135deg, #4F46E5 0%, #1E3A5F 50%, #0F172A 100%);
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    /* Background decorations */
+    .bg-shape {
+      position: absolute;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.03);
+    }
+    .shape-1 { width: 600px; height: 600px; top: -200px; right: -100px; }
+    .shape-2 { width: 400px; height: 400px; bottom: -100px; left: -100px; }
+    .shape-3 { width: 200px; height: 200px; top: 50%; left: 20%; }
+    
+    /* Grid pattern */
+    .grid {
+      position: absolute;
+      inset: 0;
+      background-image: 
+        linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px);
+      background-size: 60px 60px;
+    }
+    
+    .content {
+      display: flex;
+      align-items: center;
+      gap: 80px;
+      z-index: 10;
+    }
+    
+    /* PDF Icon */
+    .pdf-icon {
+      width: 280px;
+      height: 320px;
+      position: relative;
+    }
+    .pdf-page {
+      position: absolute;
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 25px 50px -12px rgba(0,0,0,0.4);
+    }
+    .page-1 {
+      width: 200px;
+      height: 260px;
+      top: 30px;
+      left: 40px;
+      transform: rotate(-8deg);
+      background: linear-gradient(135deg, #fff 0%, #f8fafc 100%);
+    }
+    .page-2 {
+      width: 200px;
+      height: 260px;
+      top: 20px;
+      left: 60px;
+      transform: rotate(5deg);
+      background: linear-gradient(135deg, #fff 0%, #f1f5f9 100%);
+    }
+    .page-3 {
+      width: 200px;
+      height: 260px;
+      top: 40px;
+      left: 50px;
+      background: white;
+      display: flex;
+      flex-direction: column;
+      padding: 30px;
+    }
+    .pdf-logo {
+      width: 50px;
+      height: 50px;
+      background: linear-gradient(135deg, #EF4444 0%, #DC2626 100%);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-weight: bold;
+      font-size: 14px;
+      margin-bottom: 20px;
+    }
+    .pdf-line {
+      height: 8px;
+      background: #E2E8F0;
+      border-radius: 4px;
+      margin-bottom: 12px;
+    }
+    .pdf-line:nth-child(2) { width: 100%; }
+    .pdf-line:nth-child(3) { width: 80%; }
+    .pdf-line:nth-child(4) { width: 90%; }
+    .pdf-line:nth-child(5) { width: 60%; }
+    
+    /* Text content */
+    .text-content {
+      color: white;
+    }
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+    .brand-icon {
+      width: 56px;
+      height: 56px;
+      background: white;
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 28px;
+    }
+    .brand-text {
+      font-size: 48px;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+    }
+    .tagline {
+      font-size: 32px;
+      font-weight: 600;
+      margin-bottom: 16px;
+      opacity: 0.95;
+    }
+    .subtitle {
+      font-size: 20px;
+      opacity: 0.7;
+      margin-bottom: 40px;
+      line-height: 1.5;
+    }
+    .features {
+      display: flex;
+      gap: 24px;
+    }
+    .feature {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 16px;
+      opacity: 0.9;
+    }
+    .feature-icon {
+      width: 24px;
+      height: 24px;
+      background: rgba(255,255,255,0.2);
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+    }
+    
+    /* Floating elements */
+    .float-element {
+      position: absolute;
+      background: rgba(255,255,255,0.1);
+      backdrop-filter: blur(10px);
+      border-radius: 12px;
+      padding: 12px 20px;
+      color: white;
+      font-size: 14px;
+      font-weight: 500;
+      border: 1px solid rgba(255,255,255,0.1);
+    }
+    .float-1 { top: 80px; right: 100px; }
+    .float-2 { bottom: 100px; right: 150px; }
+    .float-3 { top: 50%; right: 60px; transform: translateY(-50%); }
+  </style>
+</head>
+<body>
+  <div class="grid"></div>
+  <div class="bg-shape shape-1"></div>
+  <div class="bg-shape shape-2"></div>
+  <div class="bg-shape shape-3"></div>
+  
+  <div class="float-element float-1">🔒 100% Private</div>
+  <div class="float-element float-2">⚡ Fast & Free</div>
+  <div class="float-element float-3">📄 PDF Tools</div>
+  
+  <div class="content">
+    <div class="pdf-icon">
+      <div class="pdf-page page-1"></div>
+      <div class="pdf-page page-2"></div>
+      <div class="pdf-page page-3">
+        <div class="pdf-logo">PDF</div>
+        <div class="pdf-line"></div>
+        <div class="pdf-line"></div>
+        <div class="pdf-line"></div>
+        <div class="pdf-line"></div>
+      </div>
+    </div>
+    
+    <div class="text-content">
+      <div class="brand">
+        <div class="brand-icon">📄</div>
+        <div class="brand-text">PDF Mate</div>
+      </div>
+      <div class="tagline">Edit PDFs Offline</div>
+      <div class="subtitle">Merge, split, rotate, delete & reorder<br>— all in your browser</div>
+      <div class="features">
+        <div class="feature">
+          <div class="feature-icon">✓</div>
+          <span>No Uploads</span>
+        </div>
+        <div class="feature">
+          <div class="feature-icon">✓</div>
+          <span>Free to Start</span>
+        </div>
+        <div class="feature">
+          <div class="feature-icon">✓</div>
+          <span>Chrome Extension</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
