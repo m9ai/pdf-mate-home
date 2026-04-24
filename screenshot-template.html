@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      width: 1280px;
+      height: 800px;
+      background: #F1F5F9;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* Subtle background pattern */
+    .bg-pattern {
+      position: absolute;
+      inset: 0;
+      background-image:
+        radial-gradient(circle at 20% 30%, rgba(79, 70, 229, 0.06) 0%, transparent 50%),
+        radial-gradient(circle at 80% 70%, rgba(37, 99, 235, 0.05) 0%, transparent 50%);
+    }
+
+    /* Content container */
+    .container {
+      display: flex;
+      align-items: center;
+      gap: 60px;
+      z-index: 10;
+      padding: 0 80px;
+    }
+
+    /* Left: Feature description */
+    .info {
+      width: 420px;
+      flex-shrink: 0;
+    }
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 32px;
+    }
+    .brand-icon {
+      width: 44px; height: 44px;
+      background: linear-gradient(135deg, #4F46E5 0%, #4338CA 100%);
+      border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 22px;
+      color: white;
+    }
+    .brand-text {
+      font-size: 28px; font-weight: 800;
+      color: #1E293B;
+      letter-spacing: -0.02em;
+    }
+    .feature-title {
+      font-size: 42px; font-weight: 800;
+      color: #1E293B;
+      margin-bottom: 16px;
+      line-height: 1.2;
+    }
+    .feature-desc {
+      font-size: 18px;
+      color: #64748B;
+      line-height: 1.6;
+      margin-bottom: 28px;
+    }
+    .feature-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .feature-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 15px;
+      color: #475569;
+    }
+    .feature-check {
+      width: 22px; height: 22px;
+      background: #4F46E5;
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      color: white;
+      font-size: 12px;
+      font-weight: 700;
+      flex-shrink: 0;
+    }
+
+    /* Right: Popup mockup */
+    .popup-mockup {
+      width: 380px;
+      background: white;
+      border-radius: 16px;
+      box-shadow:
+        0 20px 50px -12px rgba(0, 0, 0, 0.15),
+        0 0 0 1px rgba(0, 0, 0, 0.05);
+      overflow: hidden;
+      flex-shrink: 0;
+    }
+    .popup-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 16px 20px;
+      border-bottom: 1px solid #E2E8F0;
+    }
+    .popup-brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .popup-icon {
+      width: 32px; height: 32px;
+      background: #F1F5F9;
+      border-radius: 8px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 16px;
+    }
+    .popup-name {
+      font-size: 15px; font-weight: 700;
+      color: #1E293B;
+    }
+    .popup-sub {
+      font-size: 11px;
+      color: #94A3B8;
+    }
+    .popup-btn {
+      padding: 6px 14px;
+      background: #4F46E5;
+      color: white;
+      border-radius: 8px;
+      font-size: 12px;
+      font-weight: 600;
+      border: none;
+    }
+    .popup-body {
+      padding: 20px;
+    }
+
+    /* Feature-specific content styles */
+    .tool-nav {
+      display: flex;
+      gap: 4px;
+      margin-bottom: 16px;
+    }
+    .tool-item {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      padding: 10px 4px;
+      border-radius: 10px;
+      font-size: 11px;
+      color: #64748B;
+    }
+    .tool-item.active {
+      background: #EEF2FF;
+      color: #4F46E5;
+      font-weight: 600;
+    }
+    .tool-emoji {
+      font-size: 18px;
+    }
+    .file-card {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 12px;
+      background: #F8FAFC;
+      border: 1px solid #E2E8F0;
+      border-radius: 10px;
+      margin-bottom: 12px;
+    }
+    .file-icon {
+      width: 36px; height: 36px;
+      background: linear-gradient(135deg, #EF4444 0%, #DC2626 100%);
+      border-radius: 8px;
+      display: flex; align-items: center; justify-content: center;
+      color: white;
+      font-size: 10px;
+      font-weight: 700;
+      flex-shrink: 0;
+    }
+    .file-info { flex: 1; min-width: 0; }
+    .file-name {
+      font-size: 13px; font-weight: 500;
+      color: #1E293B;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .file-size {
+      font-size: 11px;
+      color: #94A3B8;
+    }
+    .action-area {
+      margin-top: 12px;
+    }
+    .action-title {
+      font-size: 12px;
+      font-weight: 700;
+      color: #1E293B;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 10px;
+    }
+    .btn-row {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 8px;
+    }
+    .btn-option {
+      flex: 1;
+      padding: 10px;
+      border-radius: 10px;
+      border: 1.5px solid #E2E8F0;
+      background: white;
+      font-size: 13px;
+      font-weight: 600;
+      color: #64748B;
+      text-align: center;
+    }
+    .btn-option.active {
+      background: #4F46E5;
+      color: white;
+      border-color: #4F46E5;
+    }
+    .page-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 8px;
+      margin-top: 10px;
+    }
+    .page-thumb {
+      aspect-ratio: 1;
+      background: #F1F5F9;
+      border: 2px solid #E2E8F0;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      font-weight: 700;
+      color: #94A3B8;
+    }
+    .footer-links {
+      display: flex;
+      justify-content: center;
+      gap: 16px;
+      padding: 12px 20px;
+      border-top: 1px solid #E2E8F0;
+      font-size: 11px;
+      color: #64748B;
+    }
+  </style>
+</head>
+<body>
+  <div class="bg-pattern"></div>
+
+  <div class="container">
+    <!-- Left: Feature Info -->
+    <div class="info">
+      <div class="brand">
+        <div class="brand-icon">📄</div>
+        <div class="brand-text">PDF Mate</div>
+      </div>
+      <div class="feature-title" id="featureTitle">Split PDF</div>
+      <div class="feature-desc" id="featureDesc">Split your PDF by pages, ranges, or custom page combinations. Download results as separate files or a ZIP archive.</div>
+      <div class="feature-list" id="featureList">
+        <div class="feature-item"><div class="feature-check">✓</div><span>Extract all pages individually</span></div>
+        <div class="feature-item"><div class="feature-check">✓</div><span>Extract specific page ranges</span></div>
+        <div class="feature-item"><div class="feature-check">✓</div><span>Custom ranges like 1-3,5,7-9</span></div>
+        <div class="feature-item"><div class="feature-check">✓</div><span>Batch download as ZIP</span></div>
+      </div>
+    </div>
+
+    <!-- Right: Popup Mockup -->
+    <div class="popup-mockup">
+      <div class="popup-header">
+        <div class="popup-brand">
+          <div class="popup-icon">📄</div>
+          <div>
+            <div class="popup-name">PDF Mate</div>
+            <div class="popup-sub">Edit offline</div>
+          </div>
+        </div>
+        <div class="popup-btn">Upgrade</div>
+      </div>
+
+      <div class="popup-body">
+        <!-- Tool Nav -->
+        <div class="tool-nav">
+          <div class="tool-item"><span class="tool-emoji">🏠</span>Home</div>
+          <div class="tool-item"><span class="tool-emoji">🔗</span>Merge</div>
+          <div class="tool-item active"><span class="tool-emoji">✂️</span>Split</div>
+          <div class="tool-item"><span class="tool-emoji">🔄</span>Rotate</div>
+          <div class="tool-item"><span class="tool-emoji">🗑️</span>Delete</div>
+        </div>
+
+        <!-- File List -->
+        <div class="file-card">
+          <div class="file-icon">PDF</div>
+          <div class="file-info">
+            <div class="file-name">document-sample.pdf</div>
+            <div class="file-size">0.85 MB</div>
+          </div>
+        </div>
+
+        <!-- Action Area -->
+        <div class="action-area">
+          <div class="action-title">Split Options</div>
+          <div class="btn-row">
+            <div class="btn-option active">Extract All</div>
+            <div class="btn-option">By Range</div>
+          </div>
+          <div class="btn-row">
+            <div class="btn-option">By Size</div>
+            <div class="btn-option">Custom</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="footer-links">
+        <span>Privacy</span>
+        <span>Terms</span>
+        <span>Help</span>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // URL params to switch feature context
+    const params = new URLSearchParams(location.search);
+    const feature = params.get('feature') || 'split';
+
+    const configs = {
+      merge: {
+        title: 'Merge PDFs',
+        desc: 'Combine multiple PDF files into a single document. Drag and drop to adjust the file order before merging.',
+        list: ['Merge up to 30 PDF files', 'Drag & drop to reorder', 'Handles different page sizes', 'Instant download'],
+        nav: { home: false, merge: true, split: false, rotate: false, delete: false },
+        actionTitle: 'Ready to Merge',
+        buttons: [['Merge PDFs', true], ['Cancel', false]],
+        extra: '<p style="font-size:12px;color:#64748B;margin-top:8px;">2 files selected • Free: Up to 10 pages</p>'
+      },
+      split: {
+        title: 'Split PDF',
+        desc: 'Split your PDF by pages, ranges, or custom page combinations. Download results as separate files or a ZIP archive.',
+        list: ['Extract all pages individually', 'Extract specific page ranges', 'Custom ranges like 1-3,5,7-9', 'Batch download as ZIP'],
+        nav: { home: false, merge: false, split: true, rotate: false, delete: false },
+        actionTitle: 'Split Options',
+        buttons: [['Extract All', true], ['By Range', false], ['By Size', false], ['Custom', false]],
+        extra: ''
+      },
+      rotate: {
+        title: 'Rotate Pages',
+        desc: 'Rotate PDF pages by 90°, 180°, or 270°. Choose clockwise or counter-clockwise direction for each operation.',
+        list: ['90° / 180° / 270° rotation', 'Clockwise & Counter-Clockwise', 'Batch rotate all pages', 'Instant preview'],
+        nav: { home: false, merge: false, split: false, rotate: true, delete: false },
+        actionTitle: 'Rotation Settings',
+        buttons: [['90°', true], ['180°', false], ['270°', false], ['Clockwise ↻', true], ['Counter-Clockwise ↺', false]],
+        extra: ''
+      },
+      delete: {
+        title: 'Delete Pages',
+        desc: 'Remove unwanted pages from your PDF. Click to select individual pages or enter custom page ranges.',
+        list: ['Click to select pages', 'Enter ranges like 1,3,5-10', 'Visual page thumbnails', 'One-click deletion'],
+        nav: { home: false, merge: false, split: false, rotate: false, delete: true },
+        actionTitle: 'Delete Mode',
+        buttons: [['Click to Select', true], ['Enter Pages', false]],
+        extra: '<div class="page-grid"><div class="page-thumb">1</div><div class="page-thumb">2</div><div class="page-thumb">3</div><div class="page-thumb">4</div><div class="page-thumb">5</div><div class="page-thumb">6</div><div class="page-thumb">7</div><div class="page-thumb" style="border-color:#EF4444;color:#EF4444;">✕</div></div>'
+      },
+      reorder: {
+        title: 'Reorder Pages',
+        desc: 'Rearrange PDF pages in any order you want. Use buttons or enter a custom sequence to reorganize your document.',
+        list: ['Arrow buttons to move pages', 'Custom order input', 'Visual drag preview', 'Instant reorder & download'],
+        nav: { home: false, merge: false, split: false, rotate: false, delete: false, reorder: true },
+        actionTitle: 'Reorder Mode',
+        buttons: [['Use Buttons', true], ['Enter Order', false]],
+        extra: '<div class="page-grid"><div class="page-thumb" style="position:relative;"><span style="font-size:10px;position:absolute;top:2px;left:4px;color:#4F46E5;">Pos 1</span>3</div><div class="page-thumb" style="position:relative;"><span style="font-size:10px;position:absolute;top:2px;left:4px;color:#4F46E5;">Pos 2</span>1</div><div class="page-thumb" style="position:relative;"><span style="font-size:10px;position:absolute;top:2px;left:4px;color:#4F46E5;">Pos 3</span>2</div><div class="page-thumb" style="position:relative;"><span style="font-size:10px;position:absolute;top:2px;left:4px;color:#4F46E5;">Pos 4</span>4</div></div>'
+      }
+    };
+
+    const cfg = configs[feature] || configs.split;
+    document.getElementById('featureTitle').textContent = cfg.title;
+    document.getElementById('featureDesc').textContent = cfg.desc;
+    document.getElementById('featureList').innerHTML = cfg.list.map(item =>
+      `<div class="feature-item"><div class="feature-check">✓</div><span>${item}</span></div>`
+    ).join('');
+
+    // Update nav active state
+    const navMap = { home: 0, merge: 1, split: 2, rotate: 3, delete: 4, reorder: 5 };
+    const navItems = document.querySelectorAll('.tool-item');
+    const activeKey = Object.keys(cfg.nav).find(k => cfg.nav[k]);
+    navItems.forEach((el, i) => {
+      el.classList.toggle('active', i === navMap[activeKey]);
+    });
+
+    // Update action area
+    const actionArea = document.querySelector('.action-area');
+    const btns = cfg.buttons;
+    let btnHtml = '';
+    if (feature === 'rotate') {
+      btnHtml = `<div class="btn-row">${btns.slice(0,3).map(([t,a]) => `<div class="btn-option${a?' active':''}">${t}</div>`).join('')}</div>`;
+      btnHtml += `<div class="btn-row">${btns.slice(3).map(([t,a]) => `<div class="btn-option${a?' active':''}">${t}</div>`).join('')}</div>`;
+    } else if (btns.length <= 2) {
+      btnHtml = `<div class="btn-row">${btns.map(([t,a]) => `<div class="btn-option${a?' active':''}">${t}</div>`).join('')}</div>`;
+    } else {
+      const half = Math.ceil(btns.length / 2);
+      btnHtml = `<div class="btn-row">${btns.slice(0,half).map(([t,a]) => `<div class="btn-option${a?' active':''}">${t}</div>`).join('')}</div>`;
+      btnHtml += `<div class="btn-row">${btns.slice(half).map(([t,a]) => `<div class="btn-option${a?' active':''}">${t}</div>`).join('')}</div>`;
+    }
+    actionArea.innerHTML = `<div class="action-title">${cfg.actionTitle}</div>${btnHtml}${cfg.extra}`;
+  </script>
+</body>
+</html>

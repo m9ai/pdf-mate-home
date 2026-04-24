@@ -35,5 +35,12 @@ async function captureScreenshot(htmlFile, outputFile, width, height) {
   // Generate Large Promo Tile (1400x560)
   await captureScreenshot('large-promo.html', 'pdf-mate-large-promo.png', 1400, 560);
   
+  // Generate Screenshots (1280x800) — no "Install it now", clean feature showcase
+  await captureScreenshot('screenshot-template.html?feature=merge', 'screenshot-01-merge.png', 1280, 800);
+  await captureScreenshot('screenshot-template.html?feature=split', 'screenshot-02-split.png', 1280, 800);
+  await captureScreenshot('screenshot-template.html?feature=rotate', 'screenshot-03-rotate.png', 1280, 800);
+  await captureScreenshot('screenshot-template.html?feature=delete', 'screenshot-04-delete.png', 1280, 800);
+  await captureScreenshot('screenshot-template.html?feature=reorder', 'screenshot-05-reorder.png', 1280, 800);
+  
   console.log('All images generated successfully!');
 })();
