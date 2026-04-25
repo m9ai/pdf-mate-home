@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>PDF Mate - Edit PDFs Offline</title>
-  <meta name="description" content="PDF Mate is a free Chrome extension for offline PDF editing. Merge, split, rotate, delete, and reorder PDF pages without uploading to any server." />
+  <meta name="description" content="PDF Mate is a free Chrome extension for offline PDF editing. Merge, split, rotate, delete, reorder, and convert PDF pages without uploading to any server." />
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📄</text></svg>" />
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -23,11 +23,13 @@
       --shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px -1px rgba(0, 0, 0, 0.1);
       --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1);
       --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.1);
+      --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
       --radius: 8px;
       --radius-lg: 12px;
       --radius-xl: 16px;
+      --radius-2xl: 24px;
     }
-    
+
     /* Dark theme - auto switch based on system preference */
     @media (prefers-color-scheme: dark) {
       :root {
@@ -45,10 +47,12 @@
         --shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.4), 0 1px 2px -1px rgba(0, 0, 0, 0.4);
         --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.4), 0 2px 4px -2px rgba(0, 0, 0, 0.4);
         --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.5), 0 4px 6px -4px rgba(0, 0, 0, 0.5);
+        --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.5), 0 8px 10px -6px rgba(0, 0, 0, 0.5);
       }
     }
     html {
       color-scheme: light dark;
+      scroll-behavior: smooth;
     }
     body {
       font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Helvetica Neue', Arial, sans-serif;
@@ -62,6 +66,7 @@
       margin: 0 auto;
       padding: 0 24px;
     }
+
     /* Header */
     header {
       background: var(--bg-white);
@@ -69,6 +74,13 @@
       position: sticky;
       top: 0;
       z-index: 100;
+      backdrop-filter: blur(12px);
+      background-color: rgba(255, 255, 255, 0.85);
+    }
+    @media (prefers-color-scheme: dark) {
+      header {
+        background-color: rgba(30, 41, 59, 0.85);
+      }
     }
     header .container {
       display: flex;
@@ -80,25 +92,6 @@
       display: flex;
       align-items: center;
       gap: 12px;
-    }
-    /* Theme Toggle */
-    .theme-toggle {
-      width: 40px;
-      height: 40px;
-      border-radius: var(--radius);
-      border: 1px solid var(--border);
-      background: var(--bg-white);
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 18px;
-      transition: all 0.2s;
-      color: var(--text-secondary);
-    }
-    .theme-toggle:hover {
-      background: var(--bg);
-      border-color: var(--text-muted);
     }
     .logo {
       display: flex;
@@ -178,6 +171,19 @@
       padding: 80px 0 60px;
       text-align: center;
       background: linear-gradient(180deg, var(--bg-white) 0%, var(--bg) 100%);
+      position: relative;
+      overflow: hidden;
+    }
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(circle at 50% 50%, var(--primary-light) 0%, transparent 50%);
+      opacity: 0.5;
+      pointer-events: none;
     }
     .hero-badge {
       display: inline-flex;
@@ -190,13 +196,17 @@
       font-size: 13px;
       font-weight: 500;
       margin-bottom: 24px;
+      position: relative;
+      z-index: 1;
     }
     .hero h1 {
-      font-size: 48px;
+      font-size: 52px;
       font-weight: 800;
       line-height: 1.1;
       margin-bottom: 20px;
-      letter-spacing: -0.02em;
+      letter-spacing: -0.03em;
+      position: relative;
+      z-index: 1;
     }
     .hero h1 span {
       color: var(--primary);
@@ -204,31 +214,55 @@
     .hero-desc {
       font-size: 18px;
       color: var(--text-secondary);
-      max-width: 610px;
+      max-width: 640px;
       margin: 0 auto 32px;
+      position: relative;
+      z-index: 1;
     }
     .hero-buttons {
       display: flex;
       gap: 12px;
       justify-content: center;
       margin-bottom: 48px;
+      position: relative;
+      z-index: 1;
     }
     .hero-stats {
       display: flex;
       justify-content: center;
       gap: 48px;
+      position: relative;
+      z-index: 1;
     }
     .stat-item {
       text-align: center;
+      padding: 16px 24px;
+      background: var(--bg-white);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      min-width: 120px;
     }
     .stat-number {
       font-size: 28px;
       font-weight: 700;
-      color: var(--text-primary);
+      color: var(--primary);
     }
     .stat-label {
       font-size: 13px;
       color: var(--text-secondary);
+    }
+
+    /* Screenshot showcase */
+    .showcase {
+      padding: 0 0 60px;
+      text-align: center;
+    }
+    .showcase-img {
+      max-width: 900px;
+      width: 100%;
+      border-radius: var(--radius-xl);
+      box-shadow: var(--shadow-xl);
+      border: 1px solid var(--border);
     }
 
     /* Features */
@@ -240,9 +274,10 @@
       margin-bottom: 48px;
     }
     .section-header h2 {
-      font-size: 32px;
+      font-size: 36px;
       font-weight: 700;
       margin-bottom: 12px;
+      letter-spacing: -0.02em;
     }
     .section-header p {
       font-size: 16px;
@@ -258,21 +293,26 @@
       border: 1px solid var(--border);
       border-radius: var(--radius-lg);
       padding: 28px;
-      transition: all 0.2s;
+      transition: all 0.3s ease;
     }
     .feature-card:hover {
       box-shadow: var(--shadow-lg);
-      transform: translateY(-2px);
+      transform: translateY(-4px);
+      border-color: var(--primary);
     }
     .feature-icon {
-      width: 48px;
-      height: 48px;
+      width: 52px;
+      height: 52px;
       border-radius: var(--radius);
       display: flex;
       align-items: center;
       justify-content: center;
       font-size: 24px;
       margin-bottom: 16px;
+      transition: transform 0.3s ease;
+    }
+    .feature-card:hover .feature-icon {
+      transform: scale(1.1);
     }
     .feature-card h3 {
       font-size: 18px;
@@ -297,8 +337,17 @@
     }
     .step {
       flex: 1;
-      max-width: 280px;
+      max-width: 300px;
       text-align: center;
+      padding: 32px 24px;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      transition: all 0.3s ease;
+    }
+    .step:hover {
+      transform: translateY(-4px);
+      box-shadow: var(--shadow-md);
     }
     .step-number {
       width: 48px;
@@ -331,7 +380,7 @@
       display: grid;
       grid-template-columns: repeat(3, 1fr);
       gap: 24px;
-      max-width: 800px;
+      max-width: 900px;
       margin: 0 auto;
     }
     .pricing-card {
@@ -341,10 +390,15 @@
       padding: 32px;
       text-align: center;
       position: relative;
+      transition: all 0.3s ease;
+    }
+    .pricing-card:hover {
+      box-shadow: var(--shadow-lg);
     }
     .pricing-card.popular {
       border-color: var(--primary);
-      box-shadow: 0 0 0 1px var(--primary);
+      box-shadow: 0 0 0 1px var(--primary), var(--shadow-md);
+      transform: scale(1.02);
     }
     .popular-badge {
       position: absolute;
@@ -364,7 +418,7 @@
       margin-bottom: 8px;
     }
     .pricing-card .price {
-      font-size: 36px;
+      font-size: 40px;
       font-weight: 800;
       margin-bottom: 4px;
     }
@@ -386,7 +440,7 @@
     .pricing-features li {
       font-size: 14px;
       color: var(--text-secondary);
-      padding: 8px 0;
+      padding: 10px 0;
       border-bottom: 1px solid var(--border);
       display: flex;
       align-items: center;
@@ -399,25 +453,27 @@
       color: var(--primary);
       font-weight: 700;
     }
-    
+    .pricing-features .cross {
+      color: var(--text-muted);
+    }
+
     /* Feature icon backgrounds for light/dark mode */
     .feature-icon[data-icon="merge"] { background: #FEF3C7; color: #D97706; }
     .feature-icon[data-icon="split"] { background: #DBEAFE; color: #2563EB; }
     .feature-icon[data-icon="rotate"] { background: #D1FAE5; color: #059669; }
     .feature-icon[data-icon="delete"] { background: #FEE2E2; color: #DC2626; }
     .feature-icon[data-icon="reorder"] { background: #E0E7FF; color: #4F46E5; }
+    .feature-icon[data-icon="convert"] { background: #FCE7F3; color: #DB2777; }
     .feature-icon[data-icon="privacy"] { background: #F3E8FF; color: #7C3AED; }
-    
+
     @media (prefers-color-scheme: dark) {
       .feature-icon[data-icon="merge"] { background: rgba(217, 119, 6, 0.2); color: #FBBF24; }
       .feature-icon[data-icon="split"] { background: rgba(37, 99, 235, 0.2); color: #60A5FA; }
       .feature-icon[data-icon="rotate"] { background: rgba(5, 150, 105, 0.2); color: #34D399; }
       .feature-icon[data-icon="delete"] { background: rgba(220, 38, 38, 0.2); color: #F87171; }
       .feature-icon[data-icon="reorder"] { background: rgba(79, 70, 229, 0.2); color: #818CF8; }
+      .feature-icon[data-icon="convert"] { background: rgba(219, 39, 119, 0.2); color: #F472B6; }
       .feature-icon[data-icon="privacy"] { background: rgba(124, 58, 237, 0.2); color: #A78BFA; }
-    }
-    .pricing-features .cross {
-      color: var(--text-muted);
     }
 
     /* Security */
@@ -432,6 +488,15 @@
     }
     .security-item {
       text-align: center;
+      padding: 32px 24px;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      transition: all 0.3s ease;
+    }
+    .security-item:hover {
+      transform: translateY(-4px);
+      box-shadow: var(--shadow-md);
     }
     .security-item .icon {
       font-size: 40px;
@@ -445,6 +510,93 @@
     .security-item p {
       font-size: 14px;
       color: var(--text-secondary);
+    }
+
+    /* FAQ */
+    .faq-section {
+      padding: 80px 0;
+    }
+    .faq-container {
+      max-width: 800px;
+      margin: 0 auto;
+    }
+    .faq-item {
+      background: var(--bg-white);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      margin-bottom: 12px;
+      overflow: hidden;
+      transition: all 0.2s ease;
+    }
+    .faq-item:hover {
+      border-color: var(--primary);
+    }
+    .faq-item summary {
+      font-weight: 600;
+      cursor: pointer;
+      color: var(--text-primary);
+      padding: 20px 24px;
+      list-style: none;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .faq-item summary::-webkit-details-marker {
+      display: none;
+    }
+    .faq-item summary::after {
+      content: '+';
+      font-size: 20px;
+      color: var(--primary);
+      transition: transform 0.2s ease;
+    }
+    .faq-item[open] summary::after {
+      content: '−';
+    }
+    .faq-item p {
+      color: var(--text-secondary);
+      line-height: 1.8;
+      padding: 0 24px 20px;
+    }
+    .faq-item p a {
+      color: var(--primary);
+      text-decoration: none;
+    }
+    .faq-item p a:hover {
+      text-decoration: underline;
+    }
+
+    /* Policy sections */
+    .policy-section {
+      padding: 60px 0;
+    }
+    .policy-section:nth-child(even) {
+      background: var(--bg-white);
+    }
+    .policy-card {
+      max-width: 800px;
+      margin: 0 auto;
+      background: var(--bg-white);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 32px;
+    }
+    .policy-section:nth-child(even) .policy-card {
+      background: var(--bg);
+    }
+    .policy-card h3 {
+      font-size: 18px;
+      font-weight: 600;
+      margin-bottom: 16px;
+      color: var(--text-primary);
+    }
+    .policy-card p {
+      color: var(--text-secondary);
+      line-height: 1.8;
+      margin-bottom: 16px;
+    }
+    .policy-card p:last-child {
+      margin-bottom: 0;
     }
 
     /* Footer */
@@ -516,6 +668,11 @@
       .nav-links {
         display: none;
       }
+      .hero-stats {
+        flex-direction: column;
+        align-items: center;
+        gap: 16px;
+      }
     }
   </style>
 </head>
@@ -531,9 +688,9 @@
         <nav class="nav-links">
           <a href="#features">Features</a>
           <a href="#how-it-works">How It Works</a>
-        <a href="#pricing">Pricing</a>
-        <a href="#security">Security</a>
-        <a href="#" class="btn btn-primary">Install it now</a>
+          <a href="#pricing">Pricing</a>
+          <a href="#security">Security</a>
+          <a href="#" class="btn btn-primary">Install it now</a>
         </nav>
       </div>
     </div>
@@ -545,7 +702,7 @@
       <div class="hero-badge">🚀 Free Chrome Extension</div>
       <h1>Edit PDFs <span>Offline</span><br>Without Uploading</h1>
       <p class="hero-desc">
-        PDF Mate is a free Chrome extension that lets you merge, split, rotate, delete, and reorder PDF pages — all processed locally in your browser. Now with custom page ranges, multi-angle rotation, and flexible reordering.
+        PDF Mate is a free Chrome extension that lets you merge, split, rotate, delete, reorder, and convert PDF pages — all processed locally in your browser. No server uploads, no data collection, 100% privacy.
       </p>
       <div class="hero-buttons">
         <a href="#" class="btn btn-primary btn-lg">Install it now — It's Free</a>
@@ -553,7 +710,7 @@
       </div>
       <div class="hero-stats">
         <div class="stat-item">
-          <div class="stat-number">5</div>
+          <div class="stat-number">6</div>
           <div class="stat-label">PDF Tools</div>
         </div>
         <div class="stat-item">
@@ -602,9 +759,24 @@
           <p>Rearrange pages with arrow buttons or enter a custom order (e.g., 3,1,2,5,4). Full control over page sequence.</p>
         </div>
         <div class="feature-card">
+          <div class="feature-icon" data-icon="convert">🖼️</div>
+          <h3>Convert to Images</h3>
+          <p>Convert PDF pages to PNG or JPG with adjustable quality and DPI. Download as a ZIP archive with all pages as images.</p>
+        </div>
+        <div class="feature-card">
           <div class="feature-icon" data-icon="privacy">🔒</div>
           <h3>Privacy First</h3>
-          <p>All processing happens locally in your browser. Your files never leave your computer. No data collection.</p>
+          <p>All processing happens locally in your browser. Your files never leave your computer. No data collection, no tracking.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon" data-icon="merge">⚡</div>
+          <h3>Dark Mode</h3>
+          <p>Switch between light and dark themes for comfortable editing day or night. Your preference is saved automatically.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon" data-icon="split">📁</div>
+          <h3>File Staging</h3>
+          <p>Your uploaded files are temporarily cached locally. Close and reopen the extension — your files are still there.</p>
         </div>
       </div>
     </div>
@@ -631,7 +803,7 @@
         <div class="step">
           <div class="step-number">3</div>
           <h3>Edit & Download</h3>
-          <p>Merge, split, rotate, or reorder pages. Download the result instantly.</p>
+          <p>Merge, split, rotate, delete, reorder, or convert. Download the result instantly.</p>
         </div>
       </div>
     </div>
@@ -651,7 +823,7 @@
           <div class="period">Forever free</div>
           <ul class="pricing-features">
             <li><span class="check">✓</span> Up to 10 pages per PDF</li>
-            <li><span class="check">✓</span> All 5 PDF tools</li>
+            <li><span class="check">✓</span> All 6 PDF tools</li>
             <li><span class="check">✓</span> 500MB file size limit</li>
             <li><span class="check">✓</span> No ads</li>
             <li><span class="cross">✗</span> No batch processing</li>
@@ -665,7 +837,7 @@
           <div class="period">Billed monthly</div>
           <ul class="pricing-features">
             <li><span class="check">✓</span> Unlimited pages</li>
-            <li><span class="check">✓</span> All 5 PDF tools</li>
+            <li><span class="check">✓</span> All 6 PDF tools</li>
             <li><span class="check">✓</span> 2GB file size limit</li>
             <li><span class="check">✓</span> Batch processing</li>
             <li><span class="check">✓</span> Priority support</li>
@@ -678,7 +850,7 @@
           <div class="period">One-time payment</div>
           <ul class="pricing-features">
             <li><span class="check">✓</span> Unlimited pages</li>
-            <li><span class="check">✓</span> All 5 PDF tools</li>
+            <li><span class="check">✓</span> All 6 PDF tools</li>
             <li><span class="check">✓</span> 2GB file size limit</li>
             <li><span class="check">✓</span> Batch processing</li>
             <li><span class="check">✓</span> Lifetime updates</li>
@@ -717,114 +889,122 @@
   </section>
 
   <!-- Privacy Policy -->
-  <section id="privacy" class="security" style="padding-top: 40px; padding-bottom: 40px;">
+  <section id="privacy" class="policy-section">
     <div class="container">
       <div class="section-header">
         <h2>Privacy Policy</h2>
         <p>Your data stays with you</p>
       </div>
-      <div style="max-width: 800px; margin: 0 auto;">
-        <div style="background: var(--bg-white); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 32px;">
-          <h3 style="font-size: 18px; font-weight: 600; margin-bottom: 16px;">Local Processing Only</h3>
-          <p style="color: var(--text-secondary); line-height: 1.8; margin-bottom: 16px;">
-            PDF Mate processes all PDF files entirely within your browser using client-side JavaScript. 
-            Your files are never uploaded to any server, cloud service, or third-party API. 
-            We do not have access to your PDF content, file names, or any metadata.
-          </p>
-          <h3 style="font-size: 18px; font-weight: 600; margin-bottom: 16px;">No Data Collection</h3>
-          <p style="color: var(--text-secondary); line-height: 1.8; margin-bottom: 16px;">
-            We do not collect, store, or share your personal information or PDF files. 
-            The extension operates entirely offline after installation. 
-            The only network requests made are for license verification (if you choose to activate Pro features).
-          </p>
-          <h3 style="font-size: 18px; font-weight: 600; margin-bottom: 16px;">Chrome Storage</h3>
-          <p style="color: var(--text-secondary); line-height: 1.8;">
-            We use Chrome's local storage API to save your license key and preferences. 
-            This data is stored locally on your device and is not transmitted to our servers.
-          </p>
-        </div>
+      <div class="policy-card">
+        <h3>Local Processing Only</h3>
+        <p>
+          PDF Mate processes all PDF files entirely within your browser using client-side JavaScript.
+          Your files are never uploaded to any server, cloud service, or third-party API.
+          We do not have access to your PDF content, file names, or any metadata.
+        </p>
+        <h3>No Data Collection</h3>
+        <p>
+          We do not collect, store, or share your personal information or PDF files.
+          The extension operates entirely offline after installation.
+          The only network requests made are for license verification (if you choose to activate Pro features).
+        </p>
+        <h3>Chrome Storage</h3>
+        <p>
+          We use Chrome's local storage API to save your license key, theme preference, and recent activity history.
+          This data is stored locally on your device and is not transmitted to our servers.
+        </p>
       </div>
     </div>
   </section>
 
   <!-- Terms of Service -->
-  <section id="terms" class="security" style="padding-top: 40px; padding-bottom: 40px; background: var(--bg-white);">
+  <section id="terms" class="policy-section">
     <div class="container">
       <div class="section-header">
         <h2>Terms of Service</h2>
         <p>Simple and fair</p>
       </div>
-      <div style="max-width: 800px; margin: 0 auto;">
-        <div style="background: var(--bg); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 32px;">
-          <h3 style="font-size: 18px; font-weight: 600; margin-bottom: 16px;">Free Version</h3>
-          <p style="color: var(--text-secondary); line-height: 1.8; margin-bottom: 16px;">
-            PDF Mate's free version is available at no cost for personal and commercial use. 
-            The free version supports PDFs up to 10 pages per file. 
-            No registration or account creation is required.
-          </p>
-          <h3 style="font-size: 18px; font-weight: 600; margin-bottom: 16px;">Pro License</h3>
-          <p style="color: var(--text-secondary); line-height: 1.8; margin-bottom: 16px;">
-            Pro features can be activated by purchasing a license key through Gumroad. 
-            We offer a monthly subscription ($2.99/month) or a lifetime license ($19.99 one-time). 
-            Licenses are non-transferable and limited to 3 device activations.
-          </p>
-          <h3 style="font-size: 18px; font-weight: 600; margin-bottom: 16px;">Disclaimer</h3>
-          <p style="color: var(--text-secondary); line-height: 1.8;">
-            PDF Mate is provided "as is" without warranties of any kind. 
-            We are not responsible for any data loss or file corruption. 
-            Always keep backups of your important PDF files before editing.
-          </p>
-        </div>
+      <div class="policy-card">
+        <h3>Free Version</h3>
+        <p>
+          PDF Mate's free version is available at no cost for personal and commercial use.
+          The free version supports PDFs up to 10 pages per file.
+          No registration or account creation is required.
+        </p>
+        <h3>Pro License</h3>
+        <p>
+          Pro features can be activated by purchasing a license key through Gumroad.
+          We offer a monthly subscription ($2.99/month) or a lifetime license ($19.99 one-time).
+          Licenses are non-transferable and limited to 3 device activations.
+        </p>
+        <h3>Disclaimer</h3>
+        <p>
+          PDF Mate is provided "as is" without warranties of any kind.
+          We are not responsible for any data loss or file corruption.
+          Always keep backups of your important PDF files before editing.
+        </p>
       </div>
     </div>
   </section>
 
   <!-- Help Center -->
-  <section id="help" class="security" style="padding-top: 40px; padding-bottom: 40px;">
+  <section id="help" class="faq-section">
     <div class="container">
       <div class="section-header">
         <h2>Help Center</h2>
         <p>Frequently asked questions</p>
       </div>
-      <div style="max-width: 800px; margin: 0 auto;">
-        <div style="background: var(--bg-white); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 32px;">
-          <details style="margin-bottom: 16px; border-bottom: 1px solid var(--border); padding-bottom: 16px;">
-            <summary style="font-weight: 600; cursor: pointer; color: var(--text-primary);">How do I split a PDF into specific page ranges?</summary>
-            <p style="color: var(--text-secondary); line-height: 1.8; margin-top: 12px;">
-              Select the "Split" tool, upload your PDF, then choose "Custom Ranges" mode. 
-              Enter ranges like "1-3,5,7-9" to extract specific pages or ranges into separate files.
-            </p>
-          </details>
-          <details style="margin-bottom: 16px; border-bottom: 1px solid var(--border); padding-bottom: 16px;">
-            <summary style="font-weight: 600; cursor: pointer; color: var(--text-primary);">Can I rotate pages in both directions?</summary>
-            <p style="color: var(--text-secondary); line-height: 1.8; margin-top: 12px;">
-              Yes! Select the "Rotate" tool, choose your desired angle (90°, 180°, or 270°), 
-              then select either Clockwise or Counter-Clockwise direction.
-            </p>
-          </details>
-          <details style="margin-bottom: 16px; border-bottom: 1px solid var(--border); padding-bottom: 16px;">
-            <summary style="font-weight: 600; cursor: pointer; color: var(--text-primary);">How do I delete multiple pages at once?</summary>
-            <p style="color: var(--text-secondary); line-height: 1.8; margin-top: 12px;">
-              In the "Delete" tool, switch to "Enter Pages" mode and type page numbers or ranges 
-              (e.g., "1,3,5-10,15"). This is much faster than clicking individual pages for large documents.
-            </p>
-          </details>
-          <details style="margin-bottom: 16px; border-bottom: 1px solid var(--border); padding-bottom: 16px;">
-            <summary style="font-weight: 600; cursor: pointer; color: var(--text-primary);">Is my data safe?</summary>
-            <p style="color: var(--text-secondary); line-height: 1.8; margin-top: 12px;">
-              Absolutely. All processing happens locally in your browser. 
-              Your PDFs are never uploaded to any server. PDF Mate works offline once installed.
-            </p>
-          </details>
-          <details>
-            <summary style="font-weight: 600; cursor: pointer; color: var(--text-primary);">How do I activate Pro features?</summary>
-            <p style="color: var(--text-secondary); line-height: 1.8; margin-top: 12px;">
-              Click the "Upgrade" button or go to Settings → License Key. 
-              Purchase a license from our <a href="https://m9aiwork.gumroad.com/l/mzcyxo" style="color: var(--primary);">Gumroad store</a> 
-              and enter your license key to unlock unlimited pages and all features.
-            </p>
-          </details>
-        </div>
+      <div class="faq-container">
+        <details class="faq-item">
+          <summary>How do I convert PDF pages to images?</summary>
+          <p>
+            Select the "Convert" tool, upload your PDF, then choose PNG or JPG format.
+            Adjust quality (30-100%) and DPI (72-300) to your needs. All pages are exported as a ZIP archive.
+          </p>
+        </details>
+        <details class="faq-item">
+          <summary>How do I split a PDF into specific page ranges?</summary>
+          <p>
+            Select the "Split" tool, upload your PDF, then choose "Custom Ranges" mode.
+            Enter ranges like "1-3,5,7-9" to extract specific pages or ranges into separate files.
+          </p>
+        </details>
+        <details class="faq-item">
+          <summary>Can I rotate pages in both directions?</summary>
+          <p>
+            Yes! Select the "Rotate" tool, choose your desired angle (90°, 180°, or 270°),
+            then select either Clockwise or Counter-Clockwise direction.
+          </p>
+        </details>
+        <details class="faq-item">
+          <summary>How do I delete multiple pages at once?</summary>
+          <p>
+            In the "Delete" tool, switch to "Enter Pages" mode and type page numbers or ranges
+            (e.g., "1,3,5-10,15"). This is much faster than clicking individual pages for large documents.
+          </p>
+        </details>
+        <details class="faq-item">
+          <summary>Is my data safe?</summary>
+          <p>
+            Absolutely. All processing happens locally in your browser.
+            Your PDFs are never uploaded to any server. PDF Mate works offline once installed.
+          </p>
+        </details>
+        <details class="faq-item">
+          <summary>How do I activate Pro features?</summary>
+          <p>
+            Click the "Upgrade" button or go to Settings → License Key.
+            Purchase a license from our <a href="https://m9aiwork.gumroad.com/l/mzcyxo">Gumroad store</a>
+            and enter your license key to unlock unlimited pages and all features.
+          </p>
+        </details>
+        <details class="faq-item">
+          <summary>Does PDF Mate support dark mode?</summary>
+          <p>
+            Yes! PDF Mate supports Light, Dark, and System theme modes.
+            Go to Settings → Appearance to switch themes. Your preference is saved automatically.
+          </p>
+        </details>
       </div>
     </div>
   </section>
@@ -838,7 +1018,7 @@
             <div class="logo-icon">📄</div>
             <span class="logo-text">PDF Mate</span>
           </div>
-          <p>A free Chrome extension for offline PDF editing. Merge, split, rotate, delete, and reorder PDFs without uploading to any server.</p>
+          <p>A free Chrome extension for offline PDF editing. Merge, split, rotate, delete, reorder, and convert PDFs without uploading to any server.</p>
         </div>
         <div class="footer-links">
           <h4>Product</h4>
@@ -872,16 +1052,15 @@
   </footer>
 
   <script>
-    
     // Check for saved theme preference or default to system preference
     const savedTheme = localStorage.getItem('theme');
     const systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-    
+
     let isDark = savedTheme === 'dark' || (!savedTheme && systemPrefersDark);
-    
+
     // Initial apply
     applyTheme(isDark);
-    
+
     // Listen for system theme changes
     window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
       if (!localStorage.getItem('theme')) {
