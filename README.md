@@ -2,7 +2,7 @@
 
 **Edit PDFs Offline — Without Uploading**
 
-PDF Mate is a free Chrome extension that lets you merge, split, rotate, delete, and reorder PDF pages directly in your browser. All processing happens locally on your device; your files never leave your computer.
+PDF Mate is a free Chrome & Edge extension that lets you merge, split, rotate, delete, and reorder PDF pages directly in your browser. All processing happens locally on your device; your files never leave your computer.
 
 ---
 
@@ -45,7 +45,7 @@ Rearrange pages with arrow buttons or enter a custom order (e.g., `3,1,2,5,4`). 
 
 ## How It Works
 
-1. **Install** — Add PDF Mate to Chrome from the Web Store (takes < 10 seconds).
+1. **Install** — Add PDF Mate to Chrome or Edge from the Web Store (takes < 10 seconds).
 2. **Select** — Click the PDF Mate icon, choose your tool, and upload your PDF files.
 3. **Edit & Download** — Merge, split, rotate, delete, or reorder pages. Download the result instantly.
 
