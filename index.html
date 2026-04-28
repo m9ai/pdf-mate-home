@@ -141,12 +141,12 @@
       border: none;
       text-decoration: none;
     }
-    .btn-primary {
+    .btn.btn-primary {
       background: var(--primary);
       color: #FFFFFF;
       padding: 10px 20px;
     }
-    .btn-primary:hover {
+    .btn.btn-primary:hover {
       background: var(--primary-hover);
       transform: translateY(-1px);
       box-shadow: var(--shadow-md);
@@ -690,7 +690,7 @@
           <a href="#how-it-works">How It Works</a>
           <a href="#pricing">Pricing</a>
           <a href="#security">Security</a>
-          <a href="#" class="btn btn-primary">Install it now</a>
+          <a href="https://chromewebstore.google.com/detail/pdf-mate/odjjmkilhlmjapalpihdeaindampnphj" target="_blank" class="btn btn-primary install-link">Install it now</a>
         </nav>
       </div>
     </div>
@@ -705,7 +705,7 @@
         PDF Mate is a free Chrome & Edge extension that lets you merge, split, rotate, delete, reorder, and convert PDF pages — all processed locally in your browser. No server uploads, no data collection, 100% privacy.
       </p>
       <div class="hero-buttons">
-        <a href="#" class="btn btn-primary btn-lg">Install it now — It's Free</a>
+        <a href="https://chromewebstore.google.com/detail/pdf-mate/odjjmkilhlmjapalpihdeaindampnphj" target="_blank" class="btn btn-primary btn-lg install-link">Install it now — It's Free</a>
         <a href="#features" class="btn btn-secondary btn-lg">Learn More</a>
       </div>
       <div class="hero-stats">
@@ -828,7 +828,7 @@
             <li><span class="check">✓</span> No ads</li>
             <li><span class="cross">✗</span> No batch processing</li>
           </ul>
-          <a href="#" class="btn btn-secondary" style="width:100%">Get Started</a>
+          <a href="https://chromewebstore.google.com/detail/pdf-mate/odjjmkilhlmjapalpihdeaindampnphj" target="_blank" class="btn btn-secondary install-link" style="width:100%">Get Started</a>
         </div>
         <div class="pricing-card popular">
           <div class="popular-badge">Most Popular</div>
@@ -1068,6 +1068,26 @@
         applyTheme(isDark);
       }
     });
+
+    // Browser detection for store links
+    (function() {
+      const CHROME_STORE_URL = 'https://chromewebstore.google.com/detail/pdf-mate/odjjmkilhlmjapalpihdeaindampnphj';
+      // TODO: Replace with Edge Add-ons URL once approved
+      const EDGE_STORE_URL = 'https://chromewebstore.google.com/detail/pdf-mate/odjjmkilhlmjapalpihdeaindampnphj';
+
+      const ua = navigator.userAgent;
+      const isEdge = ua.includes('Edg/');
+      const isChrome = ua.includes('Chrome/') && !isEdge;
+
+      let storeUrl = CHROME_STORE_URL;
+      if (isEdge) {
+        storeUrl = EDGE_STORE_URL;
+      }
+
+      document.querySelectorAll('.install-link').forEach(function(link) {
+        link.href = storeUrl;
+      });
+    })();
   </script>
   <script type="text/javascript">
     (function(c,l,a,r,i,t,y){
