@@ -69,14 +69,6 @@ Rearrange pages with arrow buttons or enter a custom order (e.g., `3,1,2,5,4`). 
 
 ---
 
-## Deploy
+## Install it now
 
-This landing page is deployed via GitHub Pages.
-
-```bash
-npm install
-npm run build
-npm run preview
-```
-
-Push to `main` branch to trigger auto-deployment.
+[Chrome Web Store - PDF Mate](https://chromewebstore.google.com/detail/pdf-mate/odjjmkilhlmjapalpihdeaindampnphj)
