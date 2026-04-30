@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>PDF Mate - Edit PDFs Offline</title>
-  <meta name="description" content="PDF Mate is a free Chrome & Edge extension for offline PDF editing. Merge, split, rotate, delete, reorder, and convert PDF pages without uploading to any server." />
+  <meta name="description" content="PDF Mate is a free Chrome & Edge extension for offline PDF editing. Merge, split, rotate, delete, reorder, convert, compress, sign, and watermark PDF pages without uploading to any server." />
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📄</text></svg>" />
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; text-decoration: none; }
@@ -464,6 +464,9 @@
     .feature-icon[data-icon="delete"] { background: #FEE2E2; color: #DC2626; }
     .feature-icon[data-icon="reorder"] { background: #E0E7FF; color: #4F46E5; }
     .feature-icon[data-icon="convert"] { background: #FCE7F3; color: #DB2777; }
+    .feature-icon[data-icon="compress"] { background: #ECFDF5; color: #10B981; }
+    .feature-icon[data-icon="sign"] { background: #FFF7ED; color: #F97316; }
+    .feature-icon[data-icon="watermark"] { background: #F0F9FF; color: #0EA5E9; }
     .feature-icon[data-icon="privacy"] { background: #F3E8FF; color: #7C3AED; }
 
     @media (prefers-color-scheme: dark) {
@@ -473,6 +476,9 @@
       .feature-icon[data-icon="delete"] { background: rgba(220, 38, 38, 0.2); color: #F87171; }
       .feature-icon[data-icon="reorder"] { background: rgba(79, 70, 229, 0.2); color: #818CF8; }
       .feature-icon[data-icon="convert"] { background: rgba(219, 39, 119, 0.2); color: #F472B6; }
+      .feature-icon[data-icon="compress"] { background: rgba(16, 185, 129, 0.2); color: #34D399; }
+      .feature-icon[data-icon="sign"] { background: rgba(249, 115, 22, 0.2); color: #FDBA74; }
+      .feature-icon[data-icon="watermark"] { background: rgba(14, 165, 233, 0.2); color: #7DD3FC; }
       .feature-icon[data-icon="privacy"] { background: rgba(124, 58, 237, 0.2); color: #A78BFA; }
     }
 
@@ -702,7 +708,7 @@
       <div class="hero-badge">🚀 Free Chrome & Edge Extension</div>
       <h1>Edit PDFs <span>Offline</span><br>Without Uploading</h1>
       <p class="hero-desc">
-        PDF Mate is a free Chrome & Edge extension that lets you merge, split, rotate, delete, reorder, and convert PDF pages — all processed locally in your browser. No server uploads, no data collection, 100% privacy.
+        PDF Mate is a free Chrome & Edge extension that lets you merge, split, rotate, delete, reorder, convert, compress, sign, and watermark PDF pages — all processed locally in your browser. No server uploads, no data collection, 100% privacy.
       </p>
       <div class="hero-buttons">
         <a href="https://chromewebstore.google.com/detail/pdf-mate/odjjmkilhlmjapalpihdeaindampnphj" target="_blank" class="btn btn-primary btn-lg install-link">Install it now — It's Free</a>
@@ -710,7 +716,7 @@
       </div>
       <div class="hero-stats">
         <div class="stat-item">
-          <div class="stat-number">6</div>
+          <div class="stat-number">9</div>
           <div class="stat-label">PDF Tools</div>
         </div>
         <div class="stat-item">
@@ -764,6 +770,21 @@
           <p>Convert PDF to PNG/JPG images, editable Word documents, or PowerPoint slides. Choose the best format for your needs.</p>
         </div>
         <div class="feature-card">
+          <div class="feature-icon" data-icon="compress">🗜️</div>
+          <h3>Compress PDF</h3>
+          <p>Reduce PDF file size with Low, Medium, or High compression levels. Smart fallback keeps the original when compression won't help.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon" data-icon="sign">✍️</div>
+          <h3>Sign PDF</h3>
+          <p>Add digital signatures by drawing, typing text, or uploading an image. Place your signature on any page at the exact position you need.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon" data-icon="watermark">💧</div>
+          <h3>Watermark PDF</h3>
+          <p>Add text or image watermarks to protect your documents. Control opacity, position, and size to balance visibility and readability.</p>
+        </div>
+        <div class="feature-card">
           <div class="feature-icon" data-icon="privacy">🔒</div>
           <h3>Privacy First</h3>
           <p>All processing happens locally in your browser. Your files never leave your computer. No data collection, no tracking.</p>
@@ -772,11 +793,6 @@
           <div class="feature-icon" data-icon="merge">⚡</div>
           <h3>Dark Mode</h3>
           <p>Switch between light and dark themes for comfortable editing day or night. Your preference is saved automatically.</p>
-        </div>
-        <div class="feature-card">
-          <div class="feature-icon" data-icon="split">📁</div>
-          <h3>File Staging</h3>
-          <p>Your uploaded files are temporarily cached locally. Close and reopen the extension — your files are still there.</p>
         </div>
       </div>
     </div>
@@ -803,7 +819,7 @@
         <div class="step">
           <div class="step-number">3</div>
           <h3>Edit & Download</h3>
-          <p>Merge, split, rotate, delete, reorder, or convert. Download the result instantly.</p>
+          <p>Merge, split, rotate, delete, reorder, convert, compress, sign, or watermark. Download the result instantly.</p>
         </div>
       </div>
     </div>
@@ -822,8 +838,8 @@
           <div class="price">$0</div>
           <div class="period">Forever free</div>
           <ul class="pricing-features">
-            <li><span class="check">✓</span> Up to 10 pages per PDF</li>
-            <li><span class="check">✓</span> All 6 PDF tools</li>
+            <li><span class="check">✓</span> Up to 50 pages per PDF</li>
+            <li><span class="check">✓</span> All 9 PDF tools</li>
             <li><span class="check">✓</span> 500MB file size limit</li>
             <li><span class="check">✓</span> No ads</li>
             <li><span class="cross">✗</span> No batch processing</li>
@@ -837,7 +853,7 @@
           <div class="period">Billed monthly</div>
           <ul class="pricing-features">
             <li><span class="check">✓</span> Unlimited pages</li>
-            <li><span class="check">✓</span> All 6 PDF tools</li>
+            <li><span class="check">✓</span> All 9 PDF tools</li>
             <li><span class="check">✓</span> 2GB file size limit</li>
             <li><span class="check">✓</span> Batch processing</li>
             <li><span class="check">✓</span> Priority support</li>
@@ -850,7 +866,7 @@
           <div class="period">One-time payment</div>
           <ul class="pricing-features">
             <li><span class="check">✓</span> Unlimited pages</li>
-            <li><span class="check">✓</span> All 6 PDF tools</li>
+            <li><span class="check">✓</span> All 9 PDF tools</li>
             <li><span class="check">✓</span> 2GB file size limit</li>
             <li><span class="check">✓</span> Batch processing</li>
             <li><span class="check">✓</span> Lifetime updates</li>
@@ -928,7 +944,7 @@
         <h3>Free Version</h3>
         <p>
           PDF Mate's free version is available at no cost for personal and commercial use.
-          The free version supports PDFs up to 10 pages per file.
+          The free version supports PDFs up to 50 pages per file.
           No registration or account creation is required.
         </p>
         <h3>Pro License</h3>
@@ -956,6 +972,15 @@
       </div>
       <div class="faq-container">
         <details class="faq-item" open>
+          <summary>v1.3.0 — Sign, Compress & Watermark</summary>
+          <p>
+            <strong>New:</strong> Sign PDFs with draw, text, or image signatures on any page.<br>
+            <strong>New:</strong> Compress PDFs with three levels of quality control.<br>
+            <strong>New:</strong> Add text or image watermarks to protect your documents.<br>
+            <strong>Improved:</strong> Free tier now supports up to 50 pages per PDF (was 10).
+          </p>
+        </details>
+        <details class="faq-item">
           <summary>v1.2.1 — Chrome & Edge Support</summary>
           <p>
             <strong>New:</strong> Now available on both Chrome Web Store and Microsoft Edge Add-ons.<br>
@@ -975,7 +1000,7 @@
           <summary>v1.0.0 — Initial Release</summary>
           <p>
             <strong>New:</strong> Merge, split, rotate, delete, and reorder PDF pages — all offline.<br>
-            <strong>New:</strong> Free tier with up to 10 pages per PDF; Pro tier with unlimited pages.<br>
+            <strong>New:</strong> Free tier with up to 50 pages per PDF; Pro tier with unlimited pages.<br>
             <strong>New:</strong> Dark mode, bilingual UI (English & Chinese), and local file staging.
           </p>
         </details>
@@ -1054,7 +1079,7 @@
             <div class="logo-icon">📄</div>
             <span class="logo-text">PDF Mate</span>
           </div>
-          <p>A free Chrome & Edge extension for offline PDF editing. Merge, split, rotate, delete, reorder, and convert PDFs without uploading to any server.</p>
+          <p>A free Chrome & Edge extension for offline PDF editing. Merge, split, rotate, delete, reorder, convert, compress, sign, and watermark PDFs without uploading to any server.</p>
         </div>
         <div class="footer-links">
           <h4>Product</h4>

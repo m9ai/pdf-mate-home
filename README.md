@@ -2,7 +2,7 @@
 
 **Edit PDFs Offline — Without Uploading**
 
-PDF Mate is a free Chrome & Edge extension that lets you merge, split, rotate, delete, reorder, and convert PDF pages directly in your browser. All processing happens locally on your device; your files never leave your computer.
+PDF Mate is a free Chrome & Edge extension that lets you merge, split, rotate, delete, reorder, convert, compress, sign, and watermark PDF pages directly in your browser. All processing happens locally on your device; your files never leave your computer.
 
 ---
 
@@ -46,7 +46,7 @@ Convert PDF to PNG/JPG images, editable Word documents (.docx), or PowerPoint sl
 
 | Plan | Price | Includes |
 |------|-------|----------|
-| **Free** | $0 | Up to 10 pages per PDF, all 6 tools, 500MB file limit |
+| **Free** | $0 | Up to 50 pages per PDF, all 9 tools, 500MB file limit |
 | **[Pro Monthly](https://m9aiwork.gumroad.com/l/mzcyxo)** | $2.99/mo | Unlimited pages, batch processing, 2GB limit, priority support |
 | **[Lifetime](https://m9aiwork.gumroad.com/l/giwzzt)** | $19.99 | One-time payment, unlimited everything, lifetime updates |
 
@@ -56,7 +56,7 @@ Convert PDF to PNG/JPG images, editable Word documents (.docx), or PowerPoint sl
 
 1. **Install Extension** — Add PDF Mate to Chrome or Edge from the Web Store. It takes less than 10 seconds.
 2. **Select Your PDF** — Click the PDF Mate icon, choose your tool, and upload your PDF files.
-3. **Edit & Download** — Merge, split, rotate, delete, reorder, or convert. Download the result instantly.
+3. **Edit & Download** — Merge, split, rotate, delete, reorder, convert, compress, sign, or watermark. Download the result instantly.
 
 ---
 
