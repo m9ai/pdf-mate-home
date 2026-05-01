@@ -107,7 +107,7 @@ I needed to merge some financial PDFs and realized every online tool wanted me t
 
 Would appreciate any feedback or feature requests!
 
-🔗 [Chrome Web Store](https://chromewebstore.google.com/detail/pdf-mate/odjjmkilhlmjapalpihdeaindampnphj)
+🔗 [Chrome Web Store](https://chromewebstore.google.com/detail/pdf-mate/akdefmgagpconihjiefajkbeiejcmhmo)
 🌐 [Website](https://m9ai.work/pdf-mate-home)
 
 ---
@@ -181,7 +181,7 @@ I built PDF Mate, a browser extension that lets you edit PDFs entirely client-si
 
 Would love technical feedback or questions about the client-side PDF processing approach.
 
-🔗 [Chrome Web Store](https://chromewebstore.google.com/detail/pdf-mate/odjjmkilhlmjapalpihdeaindampnphj)
+🔗 [Chrome Web Store](https://chromewebstore.google.com/detail/pdf-mate/akdefmgagpconihjiefajkbeiejcmhmo)
 🌐 [Landing Page](https://m9ai.work/pdf-mate-home)
 
 ---
