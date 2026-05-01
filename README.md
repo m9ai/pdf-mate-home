@@ -8,7 +8,7 @@ PDF Mate is a free Chrome & Edge extension that lets you merge, split, rotate, d
 
 ## Install it now
 
-[Chrome Web Store - PDF Mate](https://chromewebstore.google.com/detail/pdf-mate/odjjmkilhlmjapalpihdeaindampnphj)
+[Chrome Web Store - PDF Mate](https://chromewebstore.google.com/detail/pdf-mate/akdefmgagpconihjiefajkbeiejcmhmo)
 
 ---
 
